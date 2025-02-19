@@ -142,7 +142,6 @@ export class TypeGameComponent {
       error: (error) => {
         console.error('Error submitting score:', error);
         this.isSubmittingScore.set(false);
-        // Show error message to user
         alert('Error submitting score. Please try again.');
       }
     });
