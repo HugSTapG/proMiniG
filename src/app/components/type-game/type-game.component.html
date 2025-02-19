@@ -1,0 +1,73 @@
+<div class="game-container">
+    @if (!isGameActive() && score() === 0) {
+    <div class="start-screen">
+        <h1>Typing Game</h1>
+        <button (click)="startGame()">Start Game</button>
+    </div>
+    }
+
+    @if (isGameActive()) {
+    <div class="game-screen">
+        <div class="stats">
+            <div>Time: {{timeLeft()}}</div>
+            <div>Score: {{score()}}</div>
+            <div>Accuracy: {{accuracy()}}%</div>
+        </div>
+
+        <div class="word-display">
+            {{currentWord()}}
+        </div>
+
+        <input
+            type="text"
+            [value]="userInput()"
+            (input)="onInputChange($event)"
+            (keyup)="checkMistake()"
+            placeholder="Type the word here..."
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false">
+    </div>
+    }
+
+    @if (!isGameActive() && score() > 0 && !isSubmittingScore() &&
+    !showLeaderboard()) {
+    <div class="results">
+        <h2>Game Over!</h2>
+        <p>Words typed correctly: {{score()}}</p>
+        <p>Accuracy: {{accuracy()}}%</p>
+
+        <div class="name-input">
+            <p>Enter your name (4 characters):</p>
+            <input
+                type="text"
+                [value]="playerName()"
+                (input)="onNameInput($event)"
+                maxlength="4"
+                pattern="[A-Za-z]+"
+                placeholder="AAAA"
+                [class.valid]="playerName().length === 4">
+            <button
+                (click)="submitScore()"
+                [disabled]="playerName().length !== 4">
+                Submit Score
+            </button>
+        </div>
+    </div>
+    }
+
+    @if (showLeaderboard()) {
+    <div class="leaderboard">
+        <h2>High Scores</h2>
+        <div class="scores-list">
+            @for (entry of leaderboard(); track entry.name) {
+            <div class="score-entry">
+                <span class="name">{{entry.name}}</span>
+                <span class="score">{{entry.score}}</span>
+            </div>
+            }
+        </div>
+        <button (click)="startGame()">Play Again</button>
+    </div>
+    }
+</div>

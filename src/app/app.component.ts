@@ -1,12 +1,26 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import {
+  HeaderComponent,
+  GamePreviewComponent,
+  TopPlayersComponent,
+  FooterComponent
+} from './components/index.component';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [
+    RouterModule,
+    GamePreviewComponent,
+    HeaderComponent,
+    FooterComponent,
+    GamePreviewComponent,
+    TopPlayersComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'proMiniG';
+  title = 'MiniJuegos';
 }
