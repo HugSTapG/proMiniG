@@ -1,5 +1,5 @@
 <div class="game-container">
-    @if (!isGameActive() && score() === 0) {
+    @if (!isGameActive() && score() === 0 && !showLeaderboard()) {
     <div class="start-screen">
         <h1>Typing Game</h1>
         <button (click)="startGame()">Start Game</button>
@@ -56,6 +56,12 @@
     </div>
     }
 
+    @if (isSubmittingScore()) {
+    <div class="loading">
+        <p>Submitting score...</p>
+    </div>
+    }
+
     @if (showLeaderboard()) {
     <div class="leaderboard">
         <h2>High Scores</h2>
@@ -67,7 +73,7 @@
             </div>
             }
         </div>
-        <button (click)="startGame()">Play Again</button>
+        <button (click)="playAgain()">Play Again</button>
     </div>
     }
 </div>

@@ -2,12 +2,16 @@
 
 <main>
 
-  <app-game-preview></app-game-preview>
-
+  <div class="game-preview-wrapper">
+    @if (isMainRoute) {
+    <app-game-preview></app-game-preview>
+    }
+  </div>
+  
   <div class="container marketing">
 
     <app-top-players></app-top-players>
-    
+
     <router-outlet></router-outlet>
 
   </div>

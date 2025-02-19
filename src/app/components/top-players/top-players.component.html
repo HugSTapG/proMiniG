@@ -1,23 +1,15 @@
 <div class="row">
-    <div class="col-lg-4">
-        <img class="bd-placeholder-img rounded-circle" src="path_to_image"
-            width="140" height="140" alt="Placeholder">
-        <h2 class="fw-normal">Heading</h2>
-        <p>Some representative placeholder content for the three columns of text
-            below the carousel. This is the first column.</p>
+    @for (player of topPlayers; track player.name; let i = $index) {
+    <div class="col-lg-4" [@playerAnimation]>
+        <img
+            class="bd-placeholder-img rounded-circle"
+            src="/api/placeholder/140/140"
+            width="140"
+            height="140"
+            [alt]="'Top Player ' + (i + 1)">
+        <h2 class="fw-normal">{{player.name}}</h2>
+        <p>Puntuacion: {{player.score}}</p>
+        <p class="position">#{{'123'[i]}}</p>
     </div>
-    <div class="col-lg-4">
-        <img class="bd-placeholder-img rounded-circle" src="path_to_image"
-            width="140" height="140" alt="Placeholder">
-        <h2 class="fw-normal">Heading</h2>
-        <p>Another exciting bit of representative placeholder content. This
-            time, we've moved on to the second column.</p>
-    </div>
-    <div class="col-lg-4">
-        <img class="bd-placeholder-img rounded-circle" src="path_to_image"
-            width="140" height="140" alt="Placeholder">
-        <h2 class="fw-normal">Heading</h2>
-        <p>And lastly this, the third column of representative placeholder
-            content.</p>
-    </div>
+    }
 </div>

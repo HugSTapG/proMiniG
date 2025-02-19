@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
   HeaderComponent,
   GamePreviewComponent,
@@ -22,5 +22,9 @@ import {
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'MiniJuegos';
+  constructor(private readonly router: Router) {}
+  
+  get isMainRoute(): boolean {
+    return this.router.url.split('#')[0] === '/';
+  }
 }

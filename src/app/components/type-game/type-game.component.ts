@@ -2,7 +2,8 @@ import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WordService } from '../../services/word.service';
-import { LeaderboardEntry, LeaderboardService } from '../../services/leaderboard.service';
+import { LeaderboardService } from '../../services/leaderboard.service';
+import { LeaderboardEntry } from '../../interfaces/index.interface';
 
 @Component({
   selector: 'app-type-game',
@@ -13,21 +14,17 @@ import { LeaderboardEntry, LeaderboardService } from '../../services/leaderboard
 })
 
 export class TypeGameComponent {
-
-  // Game state signals
   currentWord = signal<string>('');
   userInput = signal<string>('');
   score = signal<number>(0);
   isGameActive = signal<boolean>(false);
   timeLeft = signal<number>(60);
 
-  // New signals for name input and leaderboard
   playerName = signal<string>('');
   isSubmittingScore = signal<boolean>(false);
   leaderboard = signal<LeaderboardEntry[]>([]);
   showLeaderboard = signal<boolean>(false);
 
-  // Computed values
   accuracy = computed(() => {
     const totalAttempts = this.score() + this.mistakes();
     return totalAttempts ? Math.round((this.score() / totalAttempts) * 100) : 0;
@@ -42,12 +39,14 @@ export class TypeGameComponent {
   ) { }
 
   ngOnInit() {
-    // Initialize word pool when component loads
     this.wordService.initializeWordPool().subscribe();
   }
 
   startGame() {
-    // Initialize a new word pool when starting a new game
+    this.showLeaderboard.set(false);
+    this.isSubmittingScore.set(false);
+    this.playerName.set('');
+
     this.wordService.initializeWordPool().subscribe(() => {
       this.resetGame();
       this.isGameActive.set(true);
@@ -81,6 +80,11 @@ export class TypeGameComponent {
   private endGame() {
     this.isGameActive.set(false);
     clearInterval(this.timer);
+  }
+  
+  playAgain() {
+    this.showLeaderboard.set(false);
+    this.startGame();
   }
 
   onInputChange(event: Event) {
@@ -119,18 +123,27 @@ export class TypeGameComponent {
       return;
     }
 
+    console.log('Submitting score:', {
+      name: this.playerName(),
+      score: this.score()
+    });
+
     this.isSubmittingScore.set(true);
     this.leaderboardService.addScore(
       this.playerName().toUpperCase(),
       this.score()
     ).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Score submitted successfully:', response);
         this.isSubmittingScore.set(false);
         this.showLeaderboard.set(true);
         this.loadLeaderboard();
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error submitting score:', error);
         this.isSubmittingScore.set(false);
+        // Show error message to user
+        alert('Error submitting score. Please try again.');
       }
     });
   }

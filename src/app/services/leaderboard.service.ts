@@ -1,41 +1,44 @@
 // leaderboard.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-
-export interface LeaderboardEntry {
-  name: string;
-  score: number;
-  date: string;
-}
+import { Observable, map, catchError, of } from 'rxjs';
+import { LeaderboardEntry } from '../interfaces/index.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeaderboardService {
-  // Replace these with your dreamlo public/private keys
-  private readonly privateKey = 'zfL2HEGZbEWBhC_sXgBZxQuH2RknyRlUGeN1nF37hcKA';
-  private readonly publicKey = '67b5e5cd8f40bd0240afb2eb';
-  private readonly baseUrl = `http://dreamlo.com/lb`;
+  private readonly privateKey = 'sep4U0aGMUep5OkujkUU5gYjndu9qRnkGXvIjj3dS-Tw';
+  private readonly publicKey = '67b5ec548f40bd0240afc1b4';
+  private readonly baseUrl = 'http://dreamlo.com/lb';
 
   constructor(private readonly http: HttpClient) {}
 
-  // Add new score
   addScore(name: string, score: number): Observable<any> {
-    const url = `${this.baseUrl}/add/${this.privateKey}/${name}/${score}`;
-    return this.http.get(url);
+    const url = `${this.baseUrl}/${this.privateKey}/add/${name}/${score}`;
+    
+    return this.http.get(url, { responseType: 'text' }).pipe(
+      catchError(error => {
+        console.error('Error in addScore:', error);
+        throw error;
+      })
+    );
   }
 
-  // Get top scores
   getScores(): Observable<LeaderboardEntry[]> {
     const url = `${this.baseUrl}/${this.publicKey}/json`;
+    
     return this.http.get<any>(url).pipe(
       map(response => {
-        if (!response || !response.dreamlo || !response.dreamlo.leaderboard) {
+        if (!response?.dreamlo?.leaderboard) {
           return [];
         }
-        const entries = response.dreamlo.leaderboard.entry;
+        const entries = response.dreamlo.leaderboard.entry || [];
         return Array.isArray(entries) ? entries : [entries];
+      }),
+      catchError(error => {
+        console.error('Error in getScores:', error);
+        return of([]);
       })
     );
   }
