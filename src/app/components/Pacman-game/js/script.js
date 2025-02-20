@@ -19,7 +19,7 @@ var ghostsScared = false;
 var gameOver = false;
 var playerName = prompt("Ingresa tu nombre para comenzar el juego:");
 if (!playerName) {
-    playerName = "Jugador"; // Nombre por defecto si el usuario no ingresa nada
+    playerName = "JGDR"; // Nombre por defecto si el usuario no ingresa nada
 }
 console.log("Bienvenido, " + playerName + "! El juego comenzará en breve.");
 

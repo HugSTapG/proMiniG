@@ -12,7 +12,6 @@ import {
   selector: 'app-root',
   imports: [
     RouterModule,
-    GamePreviewComponent,
     HeaderComponent,
     FooterComponent,
     GamePreviewComponent,
@@ -22,8 +21,8 @@ import {
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private readonly router: Router) {}
-  
+  constructor(private readonly router: Router) { }
+
   get isMainRoute(): boolean {
     return this.router.url.split('#')[0] === '/';
   }

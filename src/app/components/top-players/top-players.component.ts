@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LeaderboardService } from '../../services/leaderboard.service';
 import { interval, Subscription } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { LeaderboardService } from '../../services/index.service';
 import { LeaderboardEntry } from '../../interfaces/index.interface';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-top-players',
@@ -28,7 +28,7 @@ export class TopPlayersComponent implements OnInit, OnDestroy {
   topPlayers: LeaderboardEntry[] = [];
   private refreshSubscription?: Subscription;
 
-  constructor(private readonly leaderboardService: LeaderboardService) {}
+  constructor(private readonly leaderboardService: LeaderboardService) { }
 
   ngOnInit() {
     this.refreshSubscription = interval(30000).pipe(

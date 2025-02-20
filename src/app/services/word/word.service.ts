@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
-import { Word } from '../interfaces/index.interface';
+import { Word } from '../../interfaces/index.interface';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class WordService {
   constructor(private readonly http: HttpClient) { }
 
   fetchWords(minLength: number = 4, maxLength: number = 8): Observable<string[]> {
-    const url = `https://api.datamuse.com/words?ml=programming+technology&max=100`;
+    const url = `${environment.datamuseApi}?ml=programming+technology&max=100`;
 
     return this.http.get<Word[]>(url).pipe(
       map(response =>
