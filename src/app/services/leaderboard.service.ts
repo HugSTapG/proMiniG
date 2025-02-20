@@ -1,4 +1,3 @@
-// leaderboard.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
@@ -7,6 +6,7 @@ import { LeaderboardEntry } from '../interfaces/index.interface';
 @Injectable({
   providedIn: 'root'
 })
+
 export class LeaderboardService {
   private readonly privateKey = 'sep4U0aGMUep5OkujkUU5gYjndu9qRnkGXvIjj3dS-Tw';
   private readonly publicKey = '67b5ec548f40bd0240afc1b4';
