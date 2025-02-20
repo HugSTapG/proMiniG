@@ -31,9 +31,11 @@
               "src/styles.css"
             ],
             "scripts": [
+              
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/app/components/Pacman-game/js/script.js"
             ]
           },
           "configurations": {
@@ -97,5 +99,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "60822a60-dfde-4b2f-a113-ce1322e7dc6b"
   }
 }
