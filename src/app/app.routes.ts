@@ -1,10 +1,5 @@
 import { Routes } from '@angular/router';
-import {
-    GameSelectorComponent,
-    PacmanMenuComponent,
-    PacmanComponent,
-    TypeGameComponent
-} from './components/index.component';
+import { GameSelectorComponent, TypeGameComponent, SnakeGameComponent } from './components/index.component';
 
 export const routes: Routes = [
     {
@@ -16,11 +11,7 @@ export const routes: Routes = [
         component: TypeGameComponent
     },
     {
-        path: 'pacman',
-        component: PacmanComponent
-    },
-    {
-        path: 'pacman-menu',
-        component: PacmanMenuComponent
+        path: 'snakegame',
+        component: SnakeGameComponent
     }
 ];

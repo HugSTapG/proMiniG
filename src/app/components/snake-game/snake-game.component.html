@@ -1,0 +1,79 @@
+<div class="game-container">
+    <h1 class="game-title" [class.hidden]="!showInitialScreen()">SNAKE GAME</h1>
+
+    <canvas #gameCanvas class="game-canvas"></canvas>
+
+    <div class="mobile-controls" [class.hidden]="!gameStarted() || gameOver()">
+        <div class="control-row">
+            <button class="control-btn" (click)="mobileControl('up')">↑</button>
+        </div>
+        <div class="control-row">
+            <button class="control-btn"
+                (click)="mobileControl('left')">←</button>
+            <button class="control-btn"
+                (click)="mobileControl('down')">↓</button>
+            <button class="control-btn"
+                (click)="mobileControl('right')">→</button>
+        </div>
+    </div>
+
+    @if (showPlayerNameEntry()) {
+    <div class="modal">
+        <div class="modal-content">
+            <h2>ENTER YOUR NAME</h2>
+            <p>Enter your 4 letter initials:</p>
+            <input
+                type="text"
+                [value]="playerInitials()"
+                maxlength="4"
+                placeholder="AAAA"
+                class="initials-input"
+                (input)="updateInitials($any($event.target).value)">
+            <button class="btn" (click)="startGameWithName()"
+                [disabled]="playerInitials().length !== 4 || !isValidInitials()">
+                Start Game
+            </button>
+        </div>
+    </div>
+    }
+
+    @if (gameOver() && !isLoading()) {
+    <div class="modal">
+        <div class="modal-content">
+            <h2>GAME OVER</h2>
+            <p>Player: <strong>{{ playerInitials() }}</strong></p>
+            <p>Your score: {{ currentScore() }}</p>
+            <div class="game-over-buttons">
+                <button class="btn" (click)="playAgain()">
+                    Play Again
+                </button>
+                <button class="btn" (click)="changePlayer()">
+                    Change Player
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if (isLoading()) {
+    <div class="modal">
+        <div class="modal-content">
+            <h2>Submitting Score</h2>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Saving your score...</p>
+            </div>
+            @if (submitError()) {
+            <p class="error-message">{{ submitError() }}</p>
+            }
+        </div>
+    </div>
+    }
+
+    @if (showInitialScreen()) {
+    <div class="start-screen">
+        <button class="btn start-btn" (click)="showPlayerEntry()">Start
+            Game</button>
+    </div>
+    }
+</div>

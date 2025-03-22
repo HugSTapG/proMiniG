@@ -59,8 +59,9 @@ export class TypeGameComponent {
   }
 
   private nextWord() {
-    const nextWord = this.wordService.getNextWord();
-    this.gameState.currentWord.set(nextWord);
+    this.wordService.getNextWord().subscribe(nextWord => {
+      this.gameState.currentWord.set(nextWord);
+    });
   }
 
   private endGame() {

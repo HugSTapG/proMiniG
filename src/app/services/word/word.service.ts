@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
-import { Word } from '../../interfaces/index.interface';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -21,23 +20,21 @@ export class WordService {
     'pipe'
   ];
 
+  private readonly baseUrl = `${environment.apiBaseUrl}/words`;
   private wordPool: string[] = [];
 
   constructor(private readonly http: HttpClient) { }
 
   fetchWords(minLength: number = 4, maxLength: number = 8): Observable<string[]> {
-    const url = `${environment.datamuseApi}?ml=programming+technology&max=100`;
+    const url = `${this.baseUrl}?minLength=${minLength}&maxLength=${maxLength}&limit=100`;
 
-    return this.http.get<Word[]>(url).pipe(
-      map(response =>
-        response
-          .map(word => word.word)
-          .filter(word =>
-            word.length >= minLength &&
-            word.length <= maxLength &&
-            /^[a-zA-Z]+$/.test(word)
-          )
-      ),
+    return this.http.get<any>(url).pipe(
+      map(response => {
+        if (!response?.success || !response?.data) {
+          return this.BACKUP_WORDS;
+        }
+        return response.data;
+      }),
       catchError(() => of(this.BACKUP_WORDS))
     );
   }
@@ -51,11 +48,20 @@ export class WordService {
     );
   }
 
-  getNextWord(): string {
+  getNextWord(): Observable<string> {
     if (this.wordPool.length === 0) {
-      this.wordPool = this.shuffleArray([...this.BACKUP_WORDS]);
+      return this.http.get<any>(`${this.baseUrl}/random`).pipe(
+        map(response => {
+          if (!response?.success || !response?.data) {
+            return this.BACKUP_WORDS[0];
+          }
+          return response.data;
+        }),
+        catchError(() => of(this.BACKUP_WORDS[0]))
+      );
     }
-    return this.wordPool.pop() ?? this.BACKUP_WORDS[0];
+
+    return of(this.wordPool.pop() ?? this.BACKUP_WORDS[0]);
   }
 
   private shuffleArray(array: string[]): string[] {
