@@ -1,7 +1,10 @@
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-
-    <canvas id="canvas" width="650" height="650" class="border"></canvas>
-
-    <script src="js/script.js" defer></script>
-
-</body>
+<div class="game-container">
+    <canvas #gameCanvas width="400" height="200"></canvas>
+  
+    <div class="overlay" *ngIf="showNameInput">
+      <h2>Insert Coin</h2>
+      <input [(ngModel)]="playerName" placeholder="Nombre del jugador" maxlength="10" />
+      <button (click)="startGame()">START</button>
+    </div>
+  </div>
+  
