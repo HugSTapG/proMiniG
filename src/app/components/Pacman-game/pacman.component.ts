@@ -1,6 +1,7 @@
 import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild, HostListener, AfterViewInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ScoreSubmissionService } from '../../services/index.service';
 
 @Component({
   selector: 'app-pacman',
@@ -48,7 +49,11 @@ export class PacmanComponent implements OnInit, AfterViewInit {
     { x: 15 * 20 + 10, y: 5 * 20 + 10, dx: 0, dy: this.ghostSpeed, type: 'random' }
   ];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private readonly scoreSubmissionService: ScoreSubmissionService
+  ) {}
+
 
   ngOnInit(): void {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -60,6 +65,12 @@ export class PacmanComponent implements OnInit, AfterViewInit {
       this.gameLoop();
     }
   }
+
+  onNameInput(event: Event) {
+    const input = (event.target as HTMLInputElement).value.toUpperCase().slice(0, 4);
+    this.playerName = input;
+}
+
 
   startGame() {
     if (!this.playerName.trim()) return;
@@ -78,6 +89,23 @@ export class PacmanComponent implements OnInit, AfterViewInit {
       case 'ArrowRight': this.pacman.desiredDx = this.pacmanSpeed; this.pacman.desiredDy = 0; break;
     }
   }
+
+  submitScore() {
+    if (!this.playerName.trim()) return;
+
+    this.scoreSubmissionService.submitScore(this.playerName.toUpperCase(), this.score)
+      .subscribe({
+        next: () => {
+          console.log('Score submitted successfully!');
+          // Opcional: podrías mostrar un mensaje o reiniciar el juego.
+        },
+        error: (error) => {
+          console.error('Error submitting score:', error);
+          alert('Error submitting score. Try again.');
+        }
+      });
+}
+
 
   gameLoop() {
     if (!this.isBrowser) return;
@@ -173,8 +201,10 @@ export class PacmanComponent implements OnInit, AfterViewInit {
           this.score += 200;
         } else {
           this.lives--;
-          if (this.lives <= 0) this.gameState = 'gameover';
-          else this.resetPlayer();
+          if (this.lives <= 0){
+            this.gameState = 'gameover';
+            this.submitScore();
+          }else this.resetPlayer();
         }
       }
     }
@@ -182,7 +212,10 @@ export class PacmanComponent implements OnInit, AfterViewInit {
 
   checkWinCondition() {
     const remaining = this.map.flat().filter(cell => cell === 0 || cell === 3).length;
-    if (remaining === 0) this.gameState = 'win';
+    if (remaining === 0){
+      this.gameState = 'win';
+      this.submitScore();
+    } 
   }
 
   resetPlayer() {

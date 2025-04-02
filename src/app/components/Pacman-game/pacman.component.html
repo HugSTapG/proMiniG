@@ -3,8 +3,19 @@
   
     <div class="overlay" *ngIf="showNameInput">
       <h2>Insert Coin</h2>
-      <input [(ngModel)]="playerName" placeholder="Nombre del jugador" maxlength="10" />
-      <button (click)="startGame()">START</button>
+      <input 
+        [(ngModel)]="playerName" 
+        placeholder="AAAA" 
+        maxlength="4" 
+        (input)="onNameInput($event)" 
+        style="text-transform: uppercase;" />
+
+        <button 
+            (click)="startGame()" 
+            [disabled]="playerName.length !== 4">
+            START
+        </button>
+    
     </div>
   </div>
   
