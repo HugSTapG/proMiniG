@@ -1,18 +1,40 @@
 <hr class="featurette-divider">
 
-<div id="pacman-section" class="row featurette">
-    <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">¡Clásico y adictivo!
-            <span class="text-body-secondary">Come puntos y esquiva
-                fantasmas.</span></h2>
-        <p class="lead">Sumérgete en el mundo de Pacman, donde la estrategia y
-            la velocidad son clave. ¿Podrás alcanzar la puntuación más alta?</p>
-        <a [routerLink]="['/pacman']" class="btn btn-outline-warning">Pacman</a>
+@if (isLoading()) {
+<div class="text-center my-5">
+    <div class="spinner-border">
+        <output class="visually-hidden">Loading...</output>
     </div>
-    <div class="col-md-5">
+</div>
+}
+
+@if (!isLoading() && games().length === 0) {
+<div class="text-center my-5">
+    <p class="lead">No hay juegos disponibles en este momento.</p>
+</div>
+}
+
+@for (game of games(); track game.id; let i = $index) {
+<div [id]="game.name.toLowerCase().replace(' ', '-') + '-section'"
+    class="row featurette">
+    <div [class]="i % 2 === 0 ? 'col-md-7' : 'col-md-7 order-md-2'">
+        <h2 class="featurette-heading fw-normal lh-1">{{ game.name }}
+            <span class="text-body-secondary">
+                @for (genre of game.genres; track genre.id; let last = $last) {
+                {{ genre.name }}{{ !last ? ', ' : '' }}
+                }
+            </span>
+        </h2>
+        <p class="lead">{{ game.description }}</p>
+        <a [routerLink]="['/' + getRouterPath(game.name)]" class="btn"
+            [ngClass]="getButtonClass(i)">
+            {{ game.name }}
+        </a>
+    </div>
+    <div [class]="i % 2 === 0 ? 'col-md-5' : 'col-md-5 order-md-1'">
         <img
-            src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Pacman.PNG"
-            alt="PAC IMG"
+            [src]="game.imageUrl"
+            [alt]="game.name + ' IMG'"
             class="bd-placeholder-img"
             width="100%"
             height="100%"
@@ -23,52 +45,4 @@
 </div>
 
 <hr class="featurette-divider">
-
-<div id="typegame-section" class="row featurette">
-    <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">¡Mejora tu velocidad de
-            escritura!
-            <span class="text-body-secondary">Cada palabra cuenta.</span></h2>
-        <p class="lead">Demuestra tus habilidades de mecanografía en este
-            emocionante desafío. ¿Eres lo suficientemente rápido para superar
-            todos los niveles?</p>
-        <a [routerLink]="['/typegame']" class="btn btn-outline-info">Type</a>
-    </div>
-    <div class="col-md-5 order-md-1">
-        <img
-            src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Artificial_Intelligence_Word_Cloud.png"
-            alt="TYP IMG"
-            class="bd-placeholder-img"
-            width="100%"
-            height="100%"
-            aria-hidden="true"
-            preserveAspectRatio="xMidYMid slice"
-            focusable="false">
-    </div>
-</div>
-
-<hr class="featurette-divider">
-
-<div id="snake-section" class="row featurette">
-    <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">Controla a la serpiente.
-            <span class="text-body-secondary">¡Crecé sin chocar!</span></h2>
-        <p class="lead">Un clásico juego de estrategia y reflejos. Guía a la
-            serpiente para que coma y crezca, pero cuidado con los
-            obstáculos.</p>
-        <a [routerLink]="['/snakegame']" class="btn btn-outline-success">Snake</a>
-    </div>
-    <div class="col-md-5">
-        <img
-            src="https://upload.wikimedia.org/wikipedia/commons/1/18/Cgasnake.png"
-            alt="SNEK IMG"
-            class="bd-placeholder-img"
-            width="100%"
-            height="100%"
-            aria-hidden="true"
-            preserveAspectRatio="xMidYMid slice"
-            focusable="false">
-    </div>
-</div>
-
-<hr class="featurette-divider">
+}

@@ -7,7 +7,7 @@ export const routes: Routes = [
         component: GameSelectorComponent
     },
     {
-        path: 'pacman',
+        path: 'pacmangame',
         component: PacmanComponent
     },
     {
